@@ -37,6 +37,7 @@
 *.sdf
 *.opensdf
 *.unsuccessfulbuild
+*.pdb
 ipch/
 obj/
 [Bb]in
