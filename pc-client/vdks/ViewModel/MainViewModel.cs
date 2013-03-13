@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using vdks.Model;
 using System.Collections.ObjectModel;
 
@@ -13,8 +14,9 @@ namespace vdks.ViewModel
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
-
-        private ObservableCollection<PhoneNumber> _numbers;
+       public RelayCommand WriteDataCommand{get; private set;}
+       public RelayCommand FindDeviceCommand { get; private set; }
+       private ObservableCollection<PhoneNumber> _numbers;
        public ObservableCollection<PhoneNumber> Numbers {
             get { return _numbers; }
             set { _numbers = value; RaisePropertyChanged(()=>Numbers); }
@@ -89,8 +91,23 @@ namespace vdks.ViewModel
             
             
             _numbers = new ObservableCollection<PhoneNumber>(/*numberlist*/);
+            FindDeviceCommand = new RelayCommand(FindDevice);
+            WriteDataCommand = new RelayCommand(WriteData);
             
 
+        }
+        private void WriteData()
+        {
+            if (System.Windows.MessageBox.Show("Данные будут записаны на устройство", "Записать данные?",System.Windows.MessageBoxButton.OKCancel) == System.Windows.MessageBoxResult.OK)
+            {
+                System.Windows.MessageBox.Show("DATA WRITTEN");
+            }
+           
+        }
+        private void FindDevice()
+        {
+            System.Windows.MessageBox.Show("DeviceFound");
+            
         }
 
         ////public override void Cleanup()

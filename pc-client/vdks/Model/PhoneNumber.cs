@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace vdks.Model
 {
@@ -27,12 +24,19 @@ namespace vdks.Model
             }
             set 
             {
-                var str = value;
-                for (var i = 0; i < str.Length -2; i++)
+                try
                 {
-                    NumberArray[i] = (byte)Int32.Parse(str.Substring(i+2,1));
+                    var str = value;
+                    for (var i = 0; i < str.Length - 2; i++)
+                    {
+                        NumberArray[i] = (byte)Int32.Parse(str.Substring(i + 2, 1));
+                    }
+                    IsSaved = false;
                 }
-                IsSaved = false;
+                catch (Exception exep)
+                {
+                    System.Windows.MessageBox.Show(exep.Message);
+                }
                 
             }
 

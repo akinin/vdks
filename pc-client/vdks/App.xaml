@@ -11,6 +11,14 @@
         <!--Global View Model Locator-->
         <vm:ViewModelLocator x:Key="Locator"
                              d:IsDataSource="True" />
+        <ControlTemplate x:Key="validationTemplate">
+            <Grid>
+                <Ellipse Fill="Red" Opacity="0.8" Width="10" Height="10"
+                 HorizontalAlignment="Right" VerticalAlignment="Top"
+                 ToolTip="{Binding Path=/ErrorContent}" />
+                <AdornedElementPlaceholder />
+            </Grid>
+        </ControlTemplate>
     </Application.Resources>
     
 </Application>

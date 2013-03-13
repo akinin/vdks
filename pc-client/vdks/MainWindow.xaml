@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ignore="http://www.ignore.com"
+        xmlns:helper="clr-namespace:vdks.Helper"
         mc:Ignorable="d ignore"
         Height="453"
         Width="625.5"
@@ -19,6 +20,7 @@
     </Window.Resources>
 
     <Grid x:Name="LayoutRoot">
+        
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="403*"/>
             <ColumnDefinition Width="215*"/>
@@ -28,15 +30,27 @@
             <RowDefinition Height="16*"/>
         </Grid.RowDefinitions>
         <DataGrid ItemsSource="{Binding Numbers, Mode=TwoWay}" SelectedItem="{Binding SelectedNumber}" AutoGenerateColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" SelectionMode="Single" CanUserResizeRows="False" LoadingRow="DataGrid_LoadingRow" EnableRowVirtualization="False" RowEditEnding="DataGrid_RowEditEnding">
+            
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Номер" Binding="{Binding Path = NumberString}" ClipboardContentBinding="{x:Null}" MinWidth="300"/>
+                <DataGridTextColumn Header="Номер"  ClipboardContentBinding="{x:Null}" MinWidth="300" Validation.ErrorTemplate="{StaticResource validationTemplate}">
+                    <DataGridTextColumn.Binding>
+                        <Binding Path="NumberString" ValidatesOnDataErrors="True" UpdateSourceTrigger="LostFocus">
+                            <Binding.ValidationRules>
+                                <helper:StringNumberValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </DataGridTextColumn.Binding>
+                </DataGridTextColumn>
                 <DataGridCheckBoxColumn Header="Записан" Binding="{Binding Path = IsSaved}" ClipboardContentBinding="{x:Null}" IsReadOnly="True" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
         <Label Content="{Binding DeviceStatus}" Grid.Row="1" Grid.ColumnSpan="2" Background="#FFDEDEDE"/>
         <StackPanel Grid.Column="1" HorizontalAlignment="Left" Height="390" VerticalAlignment="Top" Width="215">
-            <Button Content="Поиск устройства" Height="56" Margin="20,20,20,50"/>
-            <Button Content="Записать" Height="56" Margin="20,200,20,0" VerticalAlignment="Bottom"/>
+            <Button Command="{Binding FindDeviceCommand}" Content="Поиск устройства" Height="56" Margin="20,20,20,50"/>
+            <Label Height="32" Margin="20,0,20,5" Content="Серийный номер:" HorizontalContentAlignment="Center"/>
+            <TextBox HorizontalAlignment="Left" Height="23" Margin="45,0,0,0" TextWrapping="Wrap" Text="0" Width="129" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+            <Button Command="{Binding WriteDataCommand}" Content="Записать" Height="56" Margin="20,120,20,0" VerticalAlignment="Bottom"/>
+            
         </StackPanel>
     </Grid>
 </Window>
