@@ -51,7 +51,6 @@ Ankh.NoLoad
 #Tooling
 _ReSharper*/
 *.resharper
-*.pdb
 [Tt]est[Rr]esult*
 *.sass-cache
 
