@@ -1,11 +1,38 @@
 ﻿using System;
+using GalaSoft.MvvmLight;
+
+
 
 namespace vdks.Model
 {
-    public class PhoneNumber
+    public class PhoneNumber:ViewModelBase
     {
-        public bool IsSaved { get; set; }
-        public byte[] NumberArray;
+       
+        public const string IsSavedPropertyName = "IsSaved";
+
+        private bool _isSaved = false;
+
+      
+        public bool IsSaved
+        {
+            get
+            {
+                return _isSaved;
+            }
+
+            set
+            {
+                if (_isSaved == value)
+                {
+                    return;
+                }
+
+                RaisePropertyChanging(IsSavedPropertyName);
+                _isSaved = value;
+                RaisePropertyChanged(IsSavedPropertyName);
+            }
+        }
+        public byte[] NumberArray{ get; private set; }
         public string NumberString
         {
             get
@@ -32,6 +59,8 @@ namespace vdks.Model
                         NumberArray[i] = (byte)Int32.Parse(str.Substring(i + 2, 1));
                     }
                     IsSaved = false;
+                    
+
                 }
                 catch (Exception exep)
                 {
@@ -48,7 +77,8 @@ namespace vdks.Model
         }
         public PhoneNumber(byte[] number)
         {
-            NumberArray = number;
+            NumberArray = new byte[10];
+            number.CopyTo(NumberArray,0);
             IsSaved = true;
         }
 

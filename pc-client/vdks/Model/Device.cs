@@ -1,27 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO.Ports;
 
 namespace vdks.Model
 {
-    class Device
+    public class Device
     {
         public uint Serial{get;set;}
         public SerialPort COM{get;set;}
         public Device()
         {
-            COM = new SerialPort() { BaudRate = 9600, PortName = "noDevice", DataBits = 8, WriteTimeout = 1000, ReadTimeout = 1000 };
+            COM = new SerialPort { BaudRate = 9600, PortName = "noDevice", DataBits = 8, WriteTimeout = 1000, ReadTimeout = 1000 };
             Serial = 0;
         }
         public void Connect()
         {
-            var availablePorts = System.IO.Ports.SerialPort.GetPortNames();
-            for (int i = 0; i < availablePorts.Length; i++)
+            var availablePorts = SerialPort.GetPortNames();
+            foreach (var port in availablePorts)
             {
-                COM.PortName = availablePorts[i];
+                COM.PortName = port;
                 COM.Open();
                 COM.Write(Messages.Handshake, 0, 1);
                              
@@ -53,13 +49,12 @@ namespace vdks.Model
                     break;
 
                 }
-                else
-                {
+               
                     COM.PortName = "noDevice";
-                }
+                
             }
-
         }
+
         public byte ReadByte(byte offset)
         {
             if(COM.PortName != "noDevice")

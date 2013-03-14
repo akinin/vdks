@@ -29,7 +29,7 @@
             <RowDefinition Height="195*"/>
             <RowDefinition Height="16*"/>
         </Grid.RowDefinitions>
-        <DataGrid ItemsSource="{Binding Numbers, Mode=TwoWay}" SelectedItem="{Binding SelectedNumber}" AutoGenerateColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" SelectionMode="Single" CanUserResizeRows="False" LoadingRow="DataGrid_LoadingRow" EnableRowVirtualization="False" RowEditEnding="DataGrid_RowEditEnding">
+        <DataGrid ItemsSource="{Binding Numbers, Mode=TwoWay}" SelectedItem="{Binding SelectedNumber, Mode=OneWay}" AutoGenerateColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" SelectionMode="Single" CanUserResizeRows="False" LoadingRow="DataGrid_LoadingRow" RowEditEnding="DataGrid_RowEditEnding" EnableRowVirtualization="False">
             
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Номер"  ClipboardContentBinding="{x:Null}" MinWidth="300" Validation.ErrorTemplate="{StaticResource validationTemplate}">
@@ -48,7 +48,7 @@
         <StackPanel Grid.Column="1" HorizontalAlignment="Left" Height="390" VerticalAlignment="Top" Width="215">
             <Button Command="{Binding FindDeviceCommand}" Content="Поиск устройства" Height="56" Margin="20,20,20,50"/>
             <Label Height="32" Margin="20,0,20,5" Content="Серийный номер:" HorizontalContentAlignment="Center"/>
-            <TextBox HorizontalAlignment="Left" Height="23" Margin="45,0,0,0" TextWrapping="Wrap" Text="0" Width="129" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+            <TextBox HorizontalAlignment="Left" Height="23" Margin="45,0,0,0" TextWrapping="Wrap" Text="{Binding Path=Device.Serial, Mode=TwoWay}" Width="129" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
             <Button Command="{Binding WriteDataCommand}" Content="Записать" Height="56" Margin="20,120,20,0" VerticalAlignment="Bottom"/>
             
         </StackPanel>

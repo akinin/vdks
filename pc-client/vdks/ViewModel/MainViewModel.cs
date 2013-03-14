@@ -16,18 +16,34 @@ namespace vdks.ViewModel
     {
        public RelayCommand WriteDataCommand{get; private set;}
        public RelayCommand FindDeviceCommand { get; private set; }
+       public const string NumbersPropertyName = "Numbers";
        private ObservableCollection<PhoneNumber> _numbers;
-       public ObservableCollection<PhoneNumber> Numbers {
-            get { return _numbers; }
-            set { _numbers = value; RaisePropertyChanged(()=>Numbers); }
-        }
-       //TODO: подключение по SerialPort, смена статуса соединения, получение данных, валидация в таблице, отправка данных
+       public ObservableCollection<PhoneNumber> Numbers
+       {
+           get
+           {
+               return _numbers;
+           }
+
+           set
+           {
+               if (_numbers == value)
+               {
+                   return;
+               }
+
+               RaisePropertyChanging(NumbersPropertyName);
+               _numbers = value;
+               RaisePropertyChanged(NumbersPropertyName);
+           }
+       }
+       //TODO: отправка данных
        /// <summary>
        /// The <see cref="SelectedNumber" /> property's name.
        /// </summary>
        public const string SelectedNumberPropertyName = "SelectedNumber";
 
-       private PhoneNumber _selectedNumber = null;
+       private PhoneNumber _selectedNumber;
 
        /// <summary>
        /// Sets and gets the SelectedNumber property.
@@ -82,19 +98,42 @@ namespace vdks.ViewModel
                RaisePropertyChanged(DeviceStatusPropertyName);
            }
        }
+       /// <summary>
+       /// The <see cref="Device" /> property's name.
+       /// </summary>
+       public const string DevicePropertyName = "Device";
+
+       private Device _device;
+
+       /// <summary>
+       /// Sets and gets the Device property.
+       /// Changes to that property's value raise the PropertyChanged event. 
+       /// </summary>
+       public Device Device
+       {
+           get
+           {
+               return _device;
+           }
+
+           set
+           {
+               if (_device == value)
+               {
+                   return;
+               }
+
+               RaisePropertyChanging(DevicePropertyName);
+               _device = value;
+               RaisePropertyChanged(DevicePropertyName);
+           }
+       }
         public MainViewModel()
         {
-         //  var numberlist = new List<PhoneNumber>(); 
-           //     numberlist.Add(new PhoneNumber(new byte[]{9,2,1,1,2,3,1,2,1,2}));
-           //     numberlist.Add(new PhoneNumber(new byte[] { 9, 2, 1, 1, 2, 3, 1, 2, 1, 3 }));
-            //    numberlist.Add(new PhoneNumber(new byte[] { 9, 2, 1, 1, 2, 3, 1, 2, 1, 4 }));
-            
-            
             _numbers = new ObservableCollection<PhoneNumber>(/*numberlist*/);
             FindDeviceCommand = new RelayCommand(FindDevice);
             WriteDataCommand = new RelayCommand(WriteData);
-            
-
+            _device = new Device();
         }
         private void WriteData()
         {
@@ -106,8 +145,33 @@ namespace vdks.ViewModel
         }
         private void FindDevice()
         {
-            System.Windows.MessageBox.Show("DeviceFound");
+            //TODO: Убрать все в Async
+            DeviceStatus = "Выполняется поиск устройства";
+            Device.Connect();
+            if (Device.COM.PortName != "noDevice")
+            {
+                DeviceStatus = "Устройство подключено на " + Device.COM.PortName;
+                RaisePropertyChanged(DevicePropertyName);
+                var numberCount = Device.ReadByte(0);
+                var currentNumber = new byte[10];
+                DeviceStatus = "Загрузка номеров...";
+                Numbers.Clear();
+                
+                for (var i = 0; i < numberCount; i++)
+                    {
+                        var offset = (byte)(Messages.FirstNumberOffset + i * 10);
+                        for (var j = 0; j < 10; j++)
+                        {
+                            currentNumber[j] = Device.ReadByte((byte)(offset+j));
+                        }
+                        Numbers.Add(new PhoneNumber(currentNumber));
+                    }
+                DeviceStatus = "Устройство подключено на " + Device.COM.PortName;
+                
+            }
+            else DeviceStatus = "не подключено";
             
+
         }
 
         ////public override void Cleanup()
