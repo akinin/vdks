@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -147,17 +148,13 @@ namespace vdks.ViewModel
                 }
                 var bWorkerWriter = new BackgroundWorker();
                 bWorkerWriter.DoWork += bWorkerWriter_DoWork;
-                bWorkerWriter.RunWorkerCompleted += bWorkerWriter_RunWorkerCompleted;
+              
                 bWorkerWriter.RunWorkerAsync(Numbers);
             }
 
         }
 
-        void bWorkerWriter_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            DeviceStatus = "Устройство подключено на " + Device.COM.PortName;
-        }
-
+       
         void bWorkerWriter_DoWork(object sender, DoWorkEventArgs e)
         {//TODO: тесты тесты и еще раз тесты
             var numbers = (ObservableCollection<PhoneNumber>) e.Argument;
@@ -168,24 +165,27 @@ namespace vdks.ViewModel
             var serial = BitConverter.GetBytes(Device.Serial);
             Device.WriteByte(Messages.SerialOffset, serial[0]);
             Device.WriteByte((byte)(Messages.SerialOffset + 1), serial[1]);
-            for (var i = 0; i < numbers.Count; i++)
+            for (var i= 0; i < numbers.Count; i++)
             {
                 var phoneNumber = numbers[i];
                 
                 var sendArray = phoneNumber.NumberArray;
                 for (var j = 0; j < sendArray.Length; j++)
                 {
-                    if (!Device.WriteByte((byte)(Messages.FirstNumberOffset*i+j), sendArray[j]))
+                    if (!Device.WriteByte((byte)(Messages.FirstNumberOffset+i*10+j), sendArray[j]))
                     {
                         MessageBox.Show("Данные не были записаны \n или были записаны неверно", "Ошибка",
                                         MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
                     bytesWasWritten++;
-                    Application.Current.Dispatcher.BeginInvoke(new Action(() => DeviceStatus = "Запись в память устройства... " + Math.Round((double)bytesWasWritten/bytesToWrite*100).ToString() + "%"));
+                    Application.Current.Dispatcher.BeginInvoke(new Action(() => DeviceStatus = "Запись в память устройства... (" + (i+1).ToString() + "/" + numbers.Count.ToString() + ") " + Math.Round((double)bytesWasWritten / bytesToWrite * 100).ToString() + "%"));
                 }
-                Application.Current.Dispatcher.BeginInvoke(new Action(() => Numbers[i].IsSaved = true));
+                Debug.Assert(i < 3);
+                var iOldValue = i; //Фиксит баг с задержкой диспатчера
+                Application.Current.Dispatcher.BeginInvoke(new Action(() => Numbers[iOldValue].IsSaved = true));
             }
+            Application.Current.Dispatcher.BeginInvoke(new Action(() => DeviceStatus =  "Устройство подключено на " + Device.COM.PortName));
         }
         #region Поиск устройства "Async"
         private void FindDevice()
@@ -194,14 +194,10 @@ namespace vdks.ViewModel
             DeviceStatus = "Выполняется поиск устройства";
             var bWorkerConnect = new BackgroundWorker();
             bWorkerConnect.DoWork += bWorkerConnect_DoWork;
-            bWorkerConnect.RunWorkerCompleted += bWorkerConnect_RunWorkerCompleted;
+         
             bWorkerConnect.RunWorkerAsync();
         }
 
-        void bWorkerConnect_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            DeviceStatus = "Устройство подключено на " + Device.COM.PortName;
-        }
 
         private void bWorkerConnect_DoWork(object sender, DoWorkEventArgs e)
         {
@@ -228,10 +224,12 @@ namespace vdks.ViewModel
                         bytesWasRead++;
                         Application.Current.Dispatcher.BeginInvoke(new Action(() => DeviceStatus = "Загрузка номеров...(" + i.ToString() +"/" + numberCount.ToString() + ") " + Math.Round((double)(bytesWasRead) / bytesToRead * 100).ToString() + "%"));
                     }
-                    Application.Current.Dispatcher.BeginInvoke(new Action(() => Numbers.Add(new PhoneNumber(currentNumber))));
+                    var currentNumberOldValue = new byte[10];
+                    currentNumber.CopyTo(currentNumberOldValue,0);
+                    Application.Current.Dispatcher.BeginInvoke(new Action(() => Numbers.Add(new PhoneNumber(currentNumberOldValue))));
                 }
 
-
+                Application.Current.Dispatcher.BeginInvoke(new Action(() => DeviceStatus = "Устройство подключено на " + Device.COM.PortName));
             }
             else Application.Current.Dispatcher.BeginInvoke(new Action(() => DeviceStatus = "не подключено"));
         }
