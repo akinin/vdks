@@ -134,21 +134,63 @@ namespace vdks.ViewModel
         {
             _numbers = new ObservableCollection<PhoneNumber>(/*numberlist*/);
             FindDeviceCommand = new RelayCommand(FindDevice);
-            WriteDataCommand = new RelayCommand(WriteData);
+            WriteDataCommand = new RelayCommand(WriteData,IsConnected);
             _device = new Device();
         }
         private void WriteData()
         {
             if (System.Windows.MessageBox.Show("Данные будут записаны на устройство", "Записать данные?", System.Windows.MessageBoxButton.OKCancel) == System.Windows.MessageBoxResult.OK)
             {
-                System.Windows.MessageBox.Show("DATA WRITTEN");
+                foreach (var phoneNumber in Numbers)
+                {
+                    phoneNumber.IsSaved = false;
+                }
+                var bWorkerWriter = new BackgroundWorker();
+                bWorkerWriter.DoWork += bWorkerWriter_DoWork;
+                bWorkerWriter.RunWorkerCompleted += bWorkerWriter_RunWorkerCompleted;
+                bWorkerWriter.RunWorkerAsync(Numbers);
             }
 
+        }
+
+        void bWorkerWriter_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            DeviceStatus = "Устройство подключено на " + Device.COM.PortName;
+        }
+
+        void bWorkerWriter_DoWork(object sender, DoWorkEventArgs e)
+        {//TODO: тесты тесты и еще раз тесты
+            var numbers = (ObservableCollection<PhoneNumber>) e.Argument;
+             Application.Current.Dispatcher.BeginInvoke(new Action(() => DeviceStatus = "Запись в память устройства..."));
+            var bytesToWrite = numbers.Count*10;
+            var bytesWasWritten = 0;
+            Device.WriteByte(Messages.NumberCountOffset, (byte)numbers.Count);
+            var serial = BitConverter.GetBytes(Device.Serial);
+            Device.WriteByte(Messages.SerialOffset, serial[0]);
+            Device.WriteByte((byte)(Messages.SerialOffset + 1), serial[1]);
+            for (var i = 0; i < numbers.Count; i++)
+            {
+                var phoneNumber = numbers[i];
+                
+                var sendArray = phoneNumber.NumberArray;
+                for (var j = 0; j < sendArray.Length; j++)
+                {
+                    if (!Device.WriteByte((byte)(Messages.FirstNumberOffset*i+j), sendArray[j]))
+                    {
+                        MessageBox.Show("Данные не были записаны \n или были записаны неверно", "Ошибка",
+                                        MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+                    bytesWasWritten++;
+                    Application.Current.Dispatcher.BeginInvoke(new Action(() => DeviceStatus = "Запись в память устройства... " + Math.Round((double)bytesWasWritten/bytesToWrite*100).ToString() + "%"));
+                }
+                Application.Current.Dispatcher.BeginInvoke(new Action(() => Numbers[i].IsSaved = true));
+            }
         }
         #region Поиск устройства "Async"
         private void FindDevice()
         {
-            //TODO: Убрать все в Async
+            
             DeviceStatus = "Выполняется поиск устройства";
             var bWorkerConnect = new BackgroundWorker();
             bWorkerConnect.DoWork += bWorkerConnect_DoWork;
@@ -194,6 +236,12 @@ namespace vdks.ViewModel
             else Application.Current.Dispatcher.BeginInvoke(new Action(() => DeviceStatus = "не подключено"));
         }
         #endregion
+
+        private bool IsConnected()
+        {
+            return Device.COM.PortName != "noDevice";
+        }
+
         ////public override void Cleanup()
         ////{
         ////    // Clean up if needed
