@@ -1,8 +1,10 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System;
+using System.ComponentModel;
+using System.Windows;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using vdks.Model;
 using System.Collections.ObjectModel;
-
 
 namespace vdks.ViewModel
 {
@@ -14,120 +16,120 @@ namespace vdks.ViewModel
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
-       public RelayCommand WriteDataCommand{get; private set;}
-       public RelayCommand FindDeviceCommand { get; private set; }
-       public const string NumbersPropertyName = "Numbers";
-       private ObservableCollection<PhoneNumber> _numbers;
-       public ObservableCollection<PhoneNumber> Numbers
-       {
-           get
-           {
-               return _numbers;
-           }
+        public RelayCommand WriteDataCommand { get; private set; }
+        public RelayCommand FindDeviceCommand { get; private set; }
+        public const string NumbersPropertyName = "Numbers";
+        private ObservableCollection<PhoneNumber> _numbers;
+        public ObservableCollection<PhoneNumber> Numbers
+        {
+            get
+            {
+                return _numbers;
+            }
 
-           set
-           {
-               if (_numbers == value)
-               {
-                   return;
-               }
+            set
+            {
+                if (_numbers == value)
+                {
+                    return;
+                }
 
-               RaisePropertyChanging(NumbersPropertyName);
-               _numbers = value;
-               RaisePropertyChanged(NumbersPropertyName);
-           }
-       }
-       //TODO: отправка данных
-       /// <summary>
-       /// The <see cref="SelectedNumber" /> property's name.
-       /// </summary>
-       public const string SelectedNumberPropertyName = "SelectedNumber";
+                RaisePropertyChanging(NumbersPropertyName);
+                _numbers = value;
+                RaisePropertyChanged(NumbersPropertyName);
+            }
+        }
+        //TODO: отправка данных
+        /// <summary>
+        /// The <see cref="SelectedNumber" /> property's name.
+        /// </summary>
+        public const string SelectedNumberPropertyName = "SelectedNumber";
 
-       private PhoneNumber _selectedNumber;
+        private PhoneNumber _selectedNumber;
 
-       /// <summary>
-       /// Sets and gets the SelectedNumber property.
-       /// Changes to that property's value raise the PropertyChanged event. 
-       /// </summary>
-       public PhoneNumber SelectedNumber
-       {
-           get
-           {
-               return _selectedNumber;
-           }
+        /// <summary>
+        /// Sets and gets the SelectedNumber property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// </summary>
+        public PhoneNumber SelectedNumber
+        {
+            get
+            {
+                return _selectedNumber;
+            }
 
-           set
-           {
-               if (_selectedNumber == value)
-               {
-                   return;
-               }
+            set
+            {
+                if (_selectedNumber == value)
+                {
+                    return;
+                }
 
-               RaisePropertyChanging(SelectedNumberPropertyName);
-               _selectedNumber = value;
-               RaisePropertyChanged(SelectedNumberPropertyName);
-           }
-       }
-       /// <summary>
-       /// The <see cref="DeviceStatus" /> property's name.
-       /// </summary>
-       public const string DeviceStatusPropertyName = "DeviceStatus";
+                RaisePropertyChanging(SelectedNumberPropertyName);
+                _selectedNumber = value;
+                RaisePropertyChanged(SelectedNumberPropertyName);
+            }
+        }
+        /// <summary>
+        /// The <see cref="DeviceStatus" /> property's name.
+        /// </summary>
+        public const string DeviceStatusPropertyName = "DeviceStatus";
 
-       private string _deviceStatus = "не подключено";
+        private string _deviceStatus = "не подключено";
 
-       /// <summary>
-       /// Sets and gets the DeviceStatus property.
-       /// Changes to that property's value raise the PropertyChanged event. 
-       /// </summary>
-       public string DeviceStatus
-       {
-           get
-           {
-               return _deviceStatus;
-           }
+        /// <summary>
+        /// Sets and gets the DeviceStatus property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// </summary>
+        public string DeviceStatus
+        {
+            get
+            {
+                return _deviceStatus;
+            }
 
-           set
-           {
-               if (_deviceStatus == value)
-               {
-                   return;
-               }
+            set
+            {
+                if (_deviceStatus == value)
+                {
+                    return;
+                }
 
-               RaisePropertyChanging(DeviceStatusPropertyName);
-               _deviceStatus = value;
-               RaisePropertyChanged(DeviceStatusPropertyName);
-           }
-       }
-       /// <summary>
-       /// The <see cref="Device" /> property's name.
-       /// </summary>
-       public const string DevicePropertyName = "Device";
+                RaisePropertyChanging(DeviceStatusPropertyName);
+                _deviceStatus = value;
+                RaisePropertyChanged(DeviceStatusPropertyName);
+            }
+        }
+        /// <summary>
+        /// The <see cref="Device" /> property's name.
+        /// </summary>
+        public const string DevicePropertyName = "Device";
 
-       private Device _device;
+        private Device _device;
 
-       /// <summary>
-       /// Sets and gets the Device property.
-       /// Changes to that property's value raise the PropertyChanged event. 
-       /// </summary>
-       public Device Device
-       {
-           get
-           {
-               return _device;
-           }
+        /// <summary>
+        /// Sets and gets the Device property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// </summary>
+        public Device Device
+        {
+            get
+            {
+                return _device;
+            }
 
-           set
-           {
-               if (_device == value)
-               {
-                   return;
-               }
+            set
+            {
+                if (_device == value)
+                {
+                    return;
+                }
 
-               RaisePropertyChanging(DevicePropertyName);
-               _device = value;
-               RaisePropertyChanged(DevicePropertyName);
-           }
-       }
+                RaisePropertyChanging(DevicePropertyName);
+                _device = value;
+                RaisePropertyChanged(DevicePropertyName);
+            }
+        }
         public MainViewModel()
         {
             _numbers = new ObservableCollection<PhoneNumber>(/*numberlist*/);
@@ -137,43 +139,61 @@ namespace vdks.ViewModel
         }
         private void WriteData()
         {
-            if (System.Windows.MessageBox.Show("Данные будут записаны на устройство", "Записать данные?",System.Windows.MessageBoxButton.OKCancel) == System.Windows.MessageBoxResult.OK)
+            if (System.Windows.MessageBox.Show("Данные будут записаны на устройство", "Записать данные?", System.Windows.MessageBoxButton.OKCancel) == System.Windows.MessageBoxResult.OK)
             {
                 System.Windows.MessageBox.Show("DATA WRITTEN");
             }
-           
+
         }
+        #region Поиск устройства "Async"
         private void FindDevice()
         {
             //TODO: Убрать все в Async
             DeviceStatus = "Выполняется поиск устройства";
+            var bWorkerConnect = new BackgroundWorker();
+            bWorkerConnect.DoWork += bWorkerConnect_DoWork;
+            bWorkerConnect.RunWorkerCompleted += bWorkerConnect_RunWorkerCompleted;
+            bWorkerConnect.RunWorkerAsync();
+        }
+
+        void bWorkerConnect_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            DeviceStatus = "Устройство подключено на " + Device.COM.PortName;
+        }
+
+        private void bWorkerConnect_DoWork(object sender, DoWorkEventArgs e)
+        {
             Device.Connect();
             if (Device.COM.PortName != "noDevice")
             {
-                DeviceStatus = "Устройство подключено на " + Device.COM.PortName;
-                RaisePropertyChanged(DevicePropertyName);
+                Application.Current.Dispatcher.BeginInvoke(new Action(() => Numbers.Clear()));
+                Application.Current.Dispatcher.BeginInvoke(new Action(() => DeviceStatus = "Устройство подключено на " + Device.COM.PortName));
+                Application.Current.Dispatcher.BeginInvoke(new Action(() => RaisePropertyChanged(DevicePropertyName)));
+
+
                 var numberCount = Device.ReadByte(0);
                 var currentNumber = new byte[10];
-                DeviceStatus = "Загрузка номеров...";
-                Numbers.Clear();
-                
+                var bytesToRead = numberCount*10;
+                var bytesWasRead = 0;
                 for (var i = 0; i < numberCount; i++)
+                {
+                    
+                    //((BackgroundWorker)sender).ReportProgress(i);
+                    var offset = (byte)(Messages.FirstNumberOffset + i * 10);
+                    for (var j = 0; j < 10; j++)
                     {
-                        var offset = (byte)(Messages.FirstNumberOffset + i * 10);
-                        for (var j = 0; j < 10; j++)
-                        {
-                            currentNumber[j] = Device.ReadByte((byte)(offset+j));
-                        }
-                        Numbers.Add(new PhoneNumber(currentNumber));
+                        currentNumber[j] = Device.ReadByte((byte)(offset + j));
+                        bytesWasRead++;
+                        Application.Current.Dispatcher.BeginInvoke(new Action(() => DeviceStatus = "Загрузка номеров...(" + i.ToString() +"/" + numberCount.ToString() + ") " + Math.Round((double)(bytesWasRead) / bytesToRead * 100).ToString() + "%"));
                     }
-                DeviceStatus = "Устройство подключено на " + Device.COM.PortName;
-                
+                    Application.Current.Dispatcher.BeginInvoke(new Action(() => Numbers.Add(new PhoneNumber(currentNumber))));
+                }
+
+
             }
-            else DeviceStatus = "не подключено";
-            
-
+            else Application.Current.Dispatcher.BeginInvoke(new Action(() => DeviceStatus = "не подключено"));
         }
-
+        #endregion
         ////public override void Cleanup()
         ////{
         ////    // Clean up if needed
