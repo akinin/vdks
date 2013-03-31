@@ -29,7 +29,7 @@
             <RowDefinition Height="195*"/>
             <RowDefinition Height="16*"/>
         </Grid.RowDefinitions>
-        <DataGrid ItemsSource="{Binding Numbers, Mode=TwoWay}" SelectedItem="{Binding SelectedNumber, Mode=OneWay}" AutoGenerateColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" SelectionMode="Single" CanUserResizeRows="False" LoadingRow="DataGrid_LoadingRow" RowEditEnding="DataGrid_RowEditEnding" EnableRowVirtualization="False">
+        <DataGrid x:Name="NumberGrid" ItemsSource="{Binding Numbers, Mode=TwoWay}" SelectedItem="{Binding SelectedNumber, Mode=OneWay}" AutoGenerateColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" SelectionMode="Single" CanUserResizeRows="False" LoadingRow="DataGrid_LoadingRow" RowEditEnding="DataGrid_RowEditEnding" EnableRowVirtualization="False">
             
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Номер"  ClipboardContentBinding="{x:Null}" MinWidth="300" Validation.ErrorTemplate="{StaticResource validationTemplate}">
