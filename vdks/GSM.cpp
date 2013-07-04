@@ -1,6 +1,6 @@
 /*
 Name:		GSM-shiled library
-Version:	0.9
+Version:	1.0.0
 Created:	05.07.2013
 Updated:	05.07.2013
 Programmer:	Mitsengendler A.
@@ -33,11 +33,11 @@ GSM::GSM():gsmSerial(RX_PIN, TX_PIN)
 }
 
 //send command through SoftwareSerial
-bool GSM::sendCommand(const char* command)
+bool GSM::sendCommand(const String& command)
 {
         if(!gsmSerial.available())
 	{
-		gsmSerial.write(command);
+		gsmSerial.print(command);
                 gsmSerial.flush();
                 gsmSerial.write(cr);
                 return true;
@@ -47,7 +47,7 @@ bool GSM::sendCommand(const char* command)
 
 
 //send command through SoftwareSerial and wait for defined response
-bool GSM::sendCommandWaitResponse(const char* command,const  char* response, int tryCount)
+bool GSM::sendCommandWaitResponse(const String& command,const String& response, int tryCount)
 {
 	String sResponse = "";
 	char currCh;
@@ -112,27 +112,21 @@ bool GSM::initSMS()
   return true;
 }
 
-//
-void GSM::SendSMS(const char* number,const char* text)
+//Sends sms
+bool GSM::SendSMS(const String& number,const String& text)
 {
-  String numberCommand = "AT + CMGS = \"";
-  numberCommand += number;
-  numberCommand += "\"";
-  char* numberArray = new char[numberCommand.length()+1];
-  numberCommand.toCharArray(numberArray,numberCommand.length()+1);
-  Serial.println(numberCommand);
-  Serial.println(numberArray);
-  gsmSerial.print(numberArray);
-  gsmSerial.write(cr);
+  String numberCommand = "AT + CMGS = \"" + number + "\"";
+  if(!sendCommand(numberCommand)) return false;
   delay(100);
   gsmSerial.print(text);
   delay(100);
   gsmSerial.write(ctrlz);
-  if(numberArray)free(numberArray);
   gsmSerial.flush();
+  return true;
 }
 
-bool GSM::SMSRecieved(String& messageText,String& senderNumber)
+//returns true on SMS arrival and puts number and text to refs
+bool GSM::SMSRecieved(String& messageText,String& senderNumber) //TODO: check text arrival
 {
   if(gsmSerial.available()) delay(1000);
   else return false;

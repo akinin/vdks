@@ -30,6 +30,6 @@ void loop()
           Serial.println(number);
           Serial.print("text: ");
           Serial.println(text);
-          
+          gsm.SendSMS(number,"got you");
         }
 }
