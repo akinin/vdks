@@ -2,7 +2,7 @@
 Name:		GSM-shiled library
 Version:	1.1.0
 Created:	05.07.2013
-Updated:	22.07.2013
+Updated:	.07.2013
 Programmer:	Mitsengendler A.
 Production:	RumCode
 */
@@ -24,7 +24,6 @@ Production:	RumCode
 #define lf    10 //Ascii character for line feed. 
 #define ctrlz 26 //Ascii character for ctr+z. End of a SMS.
 
-#define DEBUG
 //default ctor
 GSM::GSM():gsmSerial(RX_PIN, TX_PIN)
 {

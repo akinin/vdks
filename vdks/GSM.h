@@ -13,6 +13,7 @@ Production:	RumCode
 #ifndef GSM_h
 #define GSM_h
 #endif
+#define DEBUG
 
 class GSM
 {

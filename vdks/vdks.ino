@@ -1,43 +1,69 @@
 #include "GSM.h"
 #include <SoftwareSerial.h>
 
-#define LEDpin 13
-#define RELAY1 7
-#define RELAY2 8
+#define LEDPIN 13 //onboard arduino led
+#define RELAYPIN1 7 //relay 1
+#define RELAYPIN2 8 //relay 2
+#define SENSORPIN 4 //water-level sensor
 #define ON 1
 #define OFF 0
 #define BLINK 2
 
 
 GSM gsm;
+String startCode = "00530061006D0070006C006500720020006F006E"; // "Sampler on" string in unicode
 
 void setup()
 {
 	Serial.begin(115200);
-	pinMode(LEDpin,OUTPUT);
+	pinMode(LEDPIN,OUTPUT);
+        pinMode(RELAYPIN1, OUTPUT);
+        pinMode(RELAYPIN2, OUTPUT);
+        pinMode(SENSORPIN, INPUT);
         if(!gsm.init(2400)) Serial.println(F("Can't init GSM"));
         else Serial.println(F("GSM init success"));
         if(!gsm.initSMS()) Serial.println(F("Can't init SMS engine"));
         else Serial.println(F("SMS engine init success"));
 }
-String text;
-String number;
-volatile bool gotSMS=false;
-String test = "0056006F0074002C0020006F007000690061007400270020006E00610070006900730061006C";
+String MessageText;
+String SenderNumber;
+
 void loop()
 {       
-  Serial.println(test);
-  delay(5000);
-       if(gsm.SMSRecieved(text, number))
+ 
+      if(gsm.SMSRecieved(MessageText, SenderNumber))
         {
-          Serial.println("Got SMS");
-          Serial.print("number: ");
-          Serial.println(number);
-          Serial.print("text: ");
-          Serial.println(text);
-          gsm.LED(BLINK);
-          delay(5000);
-          gsm.LED(OFF);
-         // gsm.SendSMS(number,"got you");
+          #ifdef DEBUG
+          Serial.println(F("Got SMS"));
+          Serial.print(F("number: "));
+          Serial.println(SenderNumber);
+          Serial.print(F("text: "));
+          Serial.println(MessageText);
+          #endif
+          if(MessageText.equals(startCode))
+          {
+            gsm.LED(ON);
+            gsm.SendSMS(SenderNumber,"Starting pumps...");
+            digitalWrite(RELAYPIN1, HIGH);
+            digitalWrite(RELAYPIN2, HIGH);
+            #ifdef DEBUG
+            Serial.println(F("Starting pumps..."));
+            #endif
+            while(digitalRead(SENSORPIN)==LOW)
+            {
+                #ifdef DEBUG
+                Serial.println(digitalRead(SENSORPIN));
+                #endif
+                delay(1);
+            }
+            #ifdef DEBUG
+            Serial.println(F("Stopping pumps..."));
+            #endif
+            digitalWrite(RELAYPIN1, LOW);
+            digitalWrite(RELAYPIN2, LOW);
+            gsm.SendSMS(SenderNumber,"Pumps stopped");
+            gsm.LED(OFF);
+          }
+        
         }
 }
