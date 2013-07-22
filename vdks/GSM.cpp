@@ -1,8 +1,8 @@
 /*
 Name:		GSM-shiled library
-Version:	1.0.0
+Version:	1.1.0
 Created:	05.07.2013
-Updated:	05.07.2013
+Updated:	22.07.2013
 Programmer:	Mitsengendler A.
 Production:	RumCode
 */
@@ -20,7 +20,6 @@ Production:	RumCode
 //SofwareSerial pin configuration
 #define RX_PIN 2
 #define TX_PIN 3
-#define ctrlz 26 //Ascii character for ctr+z. End of a SMS.
 #define cr    13 //Ascii character for carriage return. 
 #define lf    10 //Ascii character for line feed. 
 #define ctrlz 26 //Ascii character for ctr+z. End of a SMS.
@@ -74,6 +73,7 @@ bool GSM::sendCommandWaitResponse(const String& command,const String& response, 
                   Serial.print(" - ");
                   Serial.println(sResponse);
                   #endif
+                  gsmSerial.flush();
                   return true; //find first occurrence and return true
                 }
                	currCh = gsmSerial.read();
@@ -88,6 +88,7 @@ bool GSM::sendCommandWaitResponse(const String& command,const String& response, 
            }
           }
         }
+        gsmSerial.flush();
 	return false;
 
 }
@@ -128,9 +129,10 @@ bool GSM::SendSMS(const String& number,const String& text)
 //returns true on SMS arrival and puts number and text to refs
 bool GSM::SMSRecieved(String& messageText,String& senderNumber) //TODO: check text arrival
 {
+
   if(gsmSerial.available()) delay(1000);
   else return false;
-  char currSymb=0;
+  char currSymb;
   bool isStringMessage=false;
   String currStr="";
   while(gsmSerial.available())
@@ -165,9 +167,21 @@ bool GSM::SMSRecieved(String& messageText,String& senderNumber) //TODO: check te
   return false;
 }
 
-//void GSM::BlinkLED(Status stat)
-//{
-//}
+void GSM::LED(int status) //control onboard led
+{
+  switch(status)
+  {
+    case 0:
+    sendCommandWaitResponse("AT#SLED=0","OK",10); //off
+    break;
+    case 1:
+    sendCommandWaitResponse("AT#SLED=1","OK",10); //on
+    break;
+    case 2:
+    sendCommandWaitResponse("AT#SLED=2","OK",10); //blink
+    break;  
+  }
+}
 
 
 
