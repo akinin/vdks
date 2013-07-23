@@ -33,14 +33,14 @@ GSM::GSM():gsmSerial(RX_PIN, TX_PIN)
 //send command through SoftwareSerial
 bool GSM::sendCommand(const String& command)
 {
-        if(!gsmSerial.available())
-	{
+        //if(!gsmSerial.available())
+	//{
 		gsmSerial.print(command);
                 gsmSerial.flush();
                 gsmSerial.write(cr);
                 return true;
-	}
-	return false;
+	//}
+	//return false;
 }
 
 
@@ -116,12 +116,20 @@ bool GSM::initSMS()
 bool GSM::SendSMS(const String& number,const String& text)
 {
   String numberCommand = "AT + CMGS = \"" + number + "\"";
+  #ifdef DEBUG
+  Serial.print("numberCommand: ");
+  Serial.println(numberCommand);
+  #endif
   if(!sendCommand(numberCommand)) return false;
   delay(100);
   gsmSerial.print(text);
   delay(100);
   gsmSerial.write(ctrlz);
   gsmSerial.flush();
+  #ifdef DEBUG
+  Serial.print("text sent: ");
+  Serial.println(text);
+  #endif
   return true;
 }
 

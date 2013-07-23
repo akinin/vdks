@@ -61,8 +61,8 @@ void loop()
             #endif
             digitalWrite(RELAYPIN1, LOW);
             digitalWrite(RELAYPIN2, LOW);
-            gsm.SendSMS(SenderNumber,"Pumps stopped");
             gsm.LED(OFF);
+            gsm.SendSMS(SenderNumber,"Pumps stopped");            
           }
         
         }
