@@ -2,9 +2,9 @@
 #include <SoftwareSerial.h>
 
 #define LEDPIN 13 //onboard arduino led
-#define RELAYPIN1 7 //relay 1
-#define RELAYPIN2 8 //relay 2
-#define SENSORPIN 4 //water-level sensor
+#define RELAYPIN1 2 //relay 1
+#define RELAYPIN2 3 //relay 2
+#define SENSORPIN 6 //water-level sensor
 #define ON 1
 #define OFF 0
 #define BLINK 2

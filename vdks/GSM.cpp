@@ -18,8 +18,8 @@ Production:	RumCode
 #include "GSM.h"
 #endif
 //SofwareSerial pin configuration
-#define RX_PIN 2
-#define TX_PIN 3
+#define RX_PIN 7
+#define TX_PIN 8
 #define cr    13 //Ascii character for carriage return. 
 #define lf    10 //Ascii character for line feed. 
 #define ctrlz 26 //Ascii character for ctr+z. End of a SMS.
