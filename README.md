@@ -1,4 +1,4 @@
-Sampler Arduino Firmware and WPF based Number Manager for PC
+Sampler Arduino Firmware
 
 development:
 Akinin A.V.
