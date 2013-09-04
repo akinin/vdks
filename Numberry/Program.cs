@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Telerik.WinControls;
 
 namespace Numberry
 {
@@ -15,7 +16,9 @@ namespace Numberry
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            RadMessageLocalizationProvider.CurrentProvider = new RadMessageBoxLocalizationProvider();
+            RadMessageBox.SetThemeName("Windows8");
+            Application.Run(new RadForm1());
         }
     }
 }
