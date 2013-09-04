@@ -30,30 +30,30 @@
         {
             this.windows8Theme1 = new Telerik.WinControls.Themes.Windows8Theme();
             this.radPageViewPage3 = new Telerik.WinControls.UI.RadPageViewPage();
-            this.radButton4 = new Telerik.WinControls.UI.RadButton();
-            this.radButton5 = new Telerik.WinControls.UI.RadButton();
-            this.radListView1 = new Telerik.WinControls.UI.RadListView();
+            this.buttonAlertAdd = new Telerik.WinControls.UI.RadButton();
+            this.buttonAlertClear = new Telerik.WinControls.UI.RadButton();
+            this.alertList = new Telerik.WinControls.UI.RadListView();
             this.radPageViewPage2 = new Telerik.WinControls.UI.RadPageViewPage();
-            this.radButton3 = new Telerik.WinControls.UI.RadButton();
-            this.radButton2 = new Telerik.WinControls.UI.RadButton();
+            this.buttonFilterAdd = new Telerik.WinControls.UI.RadButton();
+            this.buttonFilterClear = new Telerik.WinControls.UI.RadButton();
             this.filterList = new Telerik.WinControls.UI.RadListView();
             this.pageSettings = new Telerik.WinControls.UI.RadPageViewPage();
             this.radPropertyGrid1 = new Telerik.WinControls.UI.RadPropertyGrid();
-            this.radButton1 = new Telerik.WinControls.UI.RadButton();
+            this.buttonWrite = new Telerik.WinControls.UI.RadButton();
             this.buttonDisconnect = new Telerik.WinControls.UI.RadButton();
             this.buttonConnect = new Telerik.WinControls.UI.RadButton();
             this.tabView1 = new Telerik.WinControls.UI.RadPageView();
             this.radPageViewPage3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.radButton4)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radButton5)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radListView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.buttonAlertAdd)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.buttonAlertClear)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.alertList)).BeginInit();
             this.radPageViewPage2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.radButton3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radButton2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.buttonFilterAdd)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.buttonFilterClear)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.filterList)).BeginInit();
             this.pageSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.radPropertyGrid1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radButton1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.buttonWrite)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.buttonDisconnect)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.buttonConnect)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tabView1)).BeginInit();
@@ -63,77 +63,83 @@
             // 
             // radPageViewPage3
             // 
-            this.radPageViewPage3.Controls.Add(this.radButton4);
-            this.radPageViewPage3.Controls.Add(this.radButton5);
-            this.radPageViewPage3.Controls.Add(this.radListView1);
+            this.radPageViewPage3.Controls.Add(this.buttonAlertAdd);
+            this.radPageViewPage3.Controls.Add(this.buttonAlertClear);
+            this.radPageViewPage3.Controls.Add(this.alertList);
             this.radPageViewPage3.Location = new System.Drawing.Point(204, 4);
             this.radPageViewPage3.Name = "radPageViewPage3";
-            this.radPageViewPage3.Size = new System.Drawing.Size(214, 378);
+            this.radPageViewPage3.Size = new System.Drawing.Size(266, 378);
             this.radPageViewPage3.Text = "Оповещение";
             // 
-            // radButton4
+            // buttonAlertAdd
             // 
-            this.radButton4.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.radButton4.Location = new System.Drawing.Point(0, 296);
-            this.radButton4.Name = "radButton4";
-            this.radButton4.Size = new System.Drawing.Size(214, 41);
-            this.radButton4.TabIndex = 5;
-            this.radButton4.Text = "Добавить";
-            this.radButton4.ThemeName = "Windows8";
+            this.buttonAlertAdd.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.buttonAlertAdd.Enabled = false;
+            this.buttonAlertAdd.Location = new System.Drawing.Point(0, 296);
+            this.buttonAlertAdd.Name = "buttonAlertAdd";
+            this.buttonAlertAdd.Size = new System.Drawing.Size(266, 41);
+            this.buttonAlertAdd.TabIndex = 5;
+            this.buttonAlertAdd.Text = "Добавить";
+            this.buttonAlertAdd.ThemeName = "Windows8";
+            this.buttonAlertAdd.Click += new System.EventHandler(this.buttonAlertAdd_Click);
             // 
-            // radButton5
+            // buttonAlertClear
             // 
-            this.radButton5.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.radButton5.Location = new System.Drawing.Point(0, 337);
-            this.radButton5.Name = "radButton5";
-            this.radButton5.Size = new System.Drawing.Size(214, 41);
-            this.radButton5.TabIndex = 4;
-            this.radButton5.Text = "Очистить";
-            this.radButton5.ThemeName = "Windows8";
+            this.buttonAlertClear.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.buttonAlertClear.Enabled = false;
+            this.buttonAlertClear.Location = new System.Drawing.Point(0, 337);
+            this.buttonAlertClear.Name = "buttonAlertClear";
+            this.buttonAlertClear.Size = new System.Drawing.Size(266, 41);
+            this.buttonAlertClear.TabIndex = 4;
+            this.buttonAlertClear.Text = "Очистить";
+            this.buttonAlertClear.ThemeName = "Windows8";
+            this.buttonAlertClear.Click += new System.EventHandler(this.buttonAlertClear_Click);
             // 
-            // radListView1
+            // alertList
             // 
-            this.radListView1.AllowEdit = false;
-            this.radListView1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.radListView1.Location = new System.Drawing.Point(0, 0);
-            this.radListView1.Name = "radListView1";
-            this.radListView1.ShowColumnHeaders = false;
-            this.radListView1.Size = new System.Drawing.Size(214, 297);
-            this.radListView1.TabIndex = 3;
-            this.radListView1.Text = "radListView1";
-            this.radListView1.ThemeName = "Windows8";
+            this.alertList.AllowEdit = false;
+            this.alertList.Dock = System.Windows.Forms.DockStyle.Top;
+            this.alertList.Location = new System.Drawing.Point(0, 0);
+            this.alertList.Name = "alertList";
+            this.alertList.ShowColumnHeaders = false;
+            this.alertList.Size = new System.Drawing.Size(266, 297);
+            this.alertList.TabIndex = 3;
+            this.alertList.Text = "radListView1";
+            this.alertList.ThemeName = "Windows8";
             // 
             // radPageViewPage2
             // 
-            this.radPageViewPage2.Controls.Add(this.radButton3);
-            this.radPageViewPage2.Controls.Add(this.radButton2);
+            this.radPageViewPage2.Controls.Add(this.buttonFilterAdd);
+            this.radPageViewPage2.Controls.Add(this.buttonFilterClear);
             this.radPageViewPage2.Controls.Add(this.filterList);
             this.radPageViewPage2.Location = new System.Drawing.Point(204, 4);
             this.radPageViewPage2.Name = "radPageViewPage2";
-            this.radPageViewPage2.Size = new System.Drawing.Size(214, 378);
+            this.radPageViewPage2.Size = new System.Drawing.Size(266, 378);
             this.radPageViewPage2.Text = "Фильтр входящих номеров";
             // 
-            // radButton3
+            // buttonFilterAdd
             // 
-            this.radButton3.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.radButton3.Location = new System.Drawing.Point(0, 296);
-            this.radButton3.Name = "radButton3";
-            this.radButton3.Size = new System.Drawing.Size(214, 41);
-            this.radButton3.TabIndex = 2;
-            this.radButton3.Text = "Добавить";
-            this.radButton3.ThemeName = "Windows8";
-            this.radButton3.Click += new System.EventHandler(this.radButton3_Click);
+            this.buttonFilterAdd.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.buttonFilterAdd.Enabled = false;
+            this.buttonFilterAdd.Location = new System.Drawing.Point(0, 296);
+            this.buttonFilterAdd.Name = "buttonFilterAdd";
+            this.buttonFilterAdd.Size = new System.Drawing.Size(266, 41);
+            this.buttonFilterAdd.TabIndex = 2;
+            this.buttonFilterAdd.Text = "Добавить";
+            this.buttonFilterAdd.ThemeName = "Windows8";
+            this.buttonFilterAdd.Click += new System.EventHandler(this.radButton3_Click);
             // 
-            // radButton2
+            // buttonFilterClear
             // 
-            this.radButton2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.radButton2.Location = new System.Drawing.Point(0, 337);
-            this.radButton2.Name = "radButton2";
-            this.radButton2.Size = new System.Drawing.Size(214, 41);
-            this.radButton2.TabIndex = 1;
-            this.radButton2.Text = "Очистить";
-            this.radButton2.ThemeName = "Windows8";
-            this.radButton2.Click += new System.EventHandler(this.radButton2_Click);
+            this.buttonFilterClear.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.buttonFilterClear.Enabled = false;
+            this.buttonFilterClear.Location = new System.Drawing.Point(0, 337);
+            this.buttonFilterClear.Name = "buttonFilterClear";
+            this.buttonFilterClear.Size = new System.Drawing.Size(266, 41);
+            this.buttonFilterClear.TabIndex = 1;
+            this.buttonFilterClear.Text = "Очистить";
+            this.buttonFilterClear.ThemeName = "Windows8";
+            this.buttonFilterClear.Click += new System.EventHandler(this.radButton2_Click);
             // 
             // filterList
             // 
@@ -142,7 +148,7 @@
             this.filterList.Location = new System.Drawing.Point(0, 0);
             this.filterList.Name = "filterList";
             this.filterList.ShowColumnHeaders = false;
-            this.filterList.Size = new System.Drawing.Size(214, 297);
+            this.filterList.Size = new System.Drawing.Size(266, 297);
             this.filterList.TabIndex = 0;
             this.filterList.Text = "radListView1";
             this.filterList.ThemeName = "Windows8";
@@ -151,7 +157,7 @@
             // pageSettings
             // 
             this.pageSettings.Controls.Add(this.radPropertyGrid1);
-            this.pageSettings.Controls.Add(this.radButton1);
+            this.pageSettings.Controls.Add(this.buttonWrite);
             this.pageSettings.Controls.Add(this.buttonDisconnect);
             this.pageSettings.Controls.Add(this.buttonConnect);
             this.pageSettings.Location = new System.Drawing.Point(204, 4);
@@ -168,7 +174,7 @@
             this.radPropertyGrid1.EnableGrouping = false;
             this.radPropertyGrid1.EnableSorting = false;
             this.radPropertyGrid1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.radPropertyGrid1.HelpBarHeight = 50F;
+            this.radPropertyGrid1.HelpBarHeight = 60F;
             this.radPropertyGrid1.Location = new System.Drawing.Point(0, 126);
             this.radPropertyGrid1.Name = "radPropertyGrid1";
             this.radPropertyGrid1.ReadOnly = true;
@@ -177,17 +183,18 @@
             this.radPropertyGrid1.Text = "radPropertyGrid1";
             this.radPropertyGrid1.ThemeName = "Windows8";
             // 
-            // radButton1
+            // buttonWrite
             // 
-            this.radButton1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.radButton1.Enabled = false;
-            this.radButton1.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.radButton1.Location = new System.Drawing.Point(0, 80);
-            this.radButton1.Name = "radButton1";
-            this.radButton1.Size = new System.Drawing.Size(266, 40);
-            this.radButton1.TabIndex = 3;
-            this.radButton1.Text = "Запись";
-            this.radButton1.ThemeName = "Windows8";
+            this.buttonWrite.Dock = System.Windows.Forms.DockStyle.Top;
+            this.buttonWrite.Enabled = false;
+            this.buttonWrite.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonWrite.Location = new System.Drawing.Point(0, 80);
+            this.buttonWrite.Name = "buttonWrite";
+            this.buttonWrite.Size = new System.Drawing.Size(266, 40);
+            this.buttonWrite.TabIndex = 3;
+            this.buttonWrite.Text = "Запись";
+            this.buttonWrite.ThemeName = "Windows8";
+            this.buttonWrite.Click += new System.EventHandler(this.buttonWrite_Click);
             // 
             // buttonDisconnect
             // 
@@ -200,6 +207,7 @@
             this.buttonDisconnect.TabIndex = 2;
             this.buttonDisconnect.Text = "Отключиться";
             this.buttonDisconnect.ThemeName = "Windows8";
+            this.buttonDisconnect.Click += new System.EventHandler(this.buttonDisconnect_Click);
             // 
             // buttonConnect
             // 
@@ -211,6 +219,7 @@
             this.buttonConnect.TabIndex = 1;
             this.buttonConnect.Text = "Поиск";
             this.buttonConnect.ThemeName = "Windows8";
+            this.buttonConnect.Click += new System.EventHandler(this.buttonConnect_Click);
             // 
             // tabView1
             // 
@@ -246,16 +255,16 @@
             this.Text = "NumBerry";
             this.ThemeName = "Windows8";
             this.radPageViewPage3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.radButton4)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radButton5)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radListView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.buttonAlertAdd)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.buttonAlertClear)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.alertList)).EndInit();
             this.radPageViewPage2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.radButton3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radButton2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.buttonFilterAdd)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.buttonFilterClear)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.filterList)).EndInit();
             this.pageSettings.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.radPropertyGrid1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radButton1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.buttonWrite)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.buttonDisconnect)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.buttonConnect)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tabView1)).EndInit();
@@ -271,16 +280,16 @@
         private Telerik.WinControls.UI.RadPageViewPage radPageViewPage3;
         private Telerik.WinControls.UI.RadPageViewPage radPageViewPage2;
         private Telerik.WinControls.UI.RadPageViewPage pageSettings;
-        private Telerik.WinControls.UI.RadButton radButton1;
+        private Telerik.WinControls.UI.RadButton buttonWrite;
         private Telerik.WinControls.UI.RadButton buttonDisconnect;
         private Telerik.WinControls.UI.RadButton buttonConnect;
         private Telerik.WinControls.UI.RadPageView tabView1;
-        private Telerik.WinControls.UI.RadButton radButton3;
-        private Telerik.WinControls.UI.RadButton radButton2;
+        private Telerik.WinControls.UI.RadButton buttonFilterAdd;
+        private Telerik.WinControls.UI.RadButton buttonFilterClear;
         private Telerik.WinControls.UI.RadListView filterList;
-        private Telerik.WinControls.UI.RadButton radButton4;
-        private Telerik.WinControls.UI.RadButton radButton5;
-        private Telerik.WinControls.UI.RadListView radListView1;
+        private Telerik.WinControls.UI.RadButton buttonAlertAdd;
+        private Telerik.WinControls.UI.RadButton buttonAlertClear;
+        private Telerik.WinControls.UI.RadListView alertList;
         private Telerik.WinControls.UI.RadPropertyGrid radPropertyGrid1;
     }
 }
