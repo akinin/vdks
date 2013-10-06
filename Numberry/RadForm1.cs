@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using Telerik.WinControls;
@@ -14,31 +17,26 @@ namespace Numberry
 {
     public partial class RadForm1 : Telerik.WinControls.UI.RadForm
     {
-       
-        private Device _device;
+        private ManualResetEventSlim dataRecievedEvent;
         public RadForm1()
         {
-            
             InitializeComponent();
             filterList.ItemSize = new Size(0, 40);
-            
-            _device = Device.GetInstance();
-            this.radPropertyGrid1.SelectedObject = this._device;
-            this.radPropertyGrid1.ExpandAllGridItems();
-           
+            alertList.ItemSize = new Size(0, 40);
+            dataRecievedEvent = new ManualResetEventSlim(false);
         }
 
-        private void filterList_VisualItemCreating(object sender, Telerik.WinControls.UI.ListViewVisualItemCreatingEventArgs e)
+        private void List_VisualItemCreating(object sender, Telerik.WinControls.UI.ListViewVisualItemCreatingEventArgs e)
         {
-            e.VisualItem = new NumberItem();
+           e.VisualItem = new NumberItem();
         }
 
-        private void radButton3_Click(object sender, EventArgs e)
+        private void buttonFilterAdd_Click(object sender, EventArgs e)
         {
             this.filterList.Items.Add("");
         }
 
-        private void radButton2_Click(object sender, EventArgs e)
+        private void buttonFilterClear_Click(object sender, EventArgs e)
         {
            
             DialogResult choice = RadMessageBox.Show("Удалить все номера из списка?", "", MessageBoxButtons.YesNo,
@@ -47,65 +45,6 @@ namespace Numberry
             {
                 this.filterList.Items.Clear();
             }
-        }
-
-        private void buttonConnect_Click(object sender, EventArgs e)
-        {
-             string[] _portlist;
-            bool _deviceFound = false;
-             _portlist = System.IO.Ports.SerialPort.GetPortNames();
-            foreach (string s in _portlist)
-            {
-                try
-                {
-                    _device.Port.PortName = s;
-                    _device.Port.Open();
-                    _device.Port.WriteLine("AB");
-                    string answer = _device.Port.ReadLine();
-                    if (answer == "BC")
-                    {
-                        _deviceFound = true;
-                        break;
-                    }
-                    _device.Port.Close();
-                }
-                catch (Exception)
-                {
-                    _device.Port.Close();
-                }
-            }
-            if (_deviceFound)
-            {
-                try
-                {
-                    _device.Port.Open();
-                    _device.InitServiceMode();
-                    SetButtonsEnabled(true);
-                    _device.ReadSerial();
-                    LoadNumbers();
-                }
-                catch (Exception ex)
-                {
-                    RadMessageBox.Show(ex.Message);
-                    _device.Port.Close();
-                }
-                
-            }
-            else
-            {
-                RadMessageBox.Show("Устройство не обнаружено"," ",MessageBoxButtons.OK,RadMessageIcon.Exclamation);
-            }
-
-        }
-
-        private void SetButtonsEnabled(bool state)
-        {
-            buttonDisconnect.Enabled = state;
-            buttonWrite.Enabled = state;
-            buttonFilterAdd.Enabled = state;
-            buttonFilterClear.Enabled = state;
-            buttonAlertAdd.Enabled = state;
-            buttonAlertClear.Enabled = state;
         }
 
         private void buttonAlertAdd_Click(object sender, EventArgs e)
@@ -123,75 +62,147 @@ namespace Numberry
             }
         }
 
+        private void buttonConnect_Click(object sender, EventArgs e)
+        {
+            if(Com.Serial.IsOpen) Com.Serial.Close();
+             SetButtonsEnabled(false);
+             string[] _portlist;
+             bool _deviceFound = false;
+             _portlist = System.IO.Ports.SerialPort.GetPortNames();
+             foreach (string s in _portlist)
+             {
+                 try
+                 {
+                     Com.Serial.PortName = s;
+                     Com.Serial.DataReceived += Serial_DataReceived;
+                     Com.Serial.Open();
+                     dataRecievedEvent.Wait(3000);
+                     if (!dataRecievedEvent.IsSet) throw new Exception("no answer");
+                     if (Com.Serial.ReadByte() != Com.EchoCode) throw new Exception("unsupported device"); ;
+                     Com.Serial.Write(new byte[]{Com.EchoReply},0,1);
+                     _deviceFound = true;
+                     dataRecievedEvent.Reset();
+                     Com.Serial.DataReceived -= Serial_DataReceived;
+                 }
+                 catch (Exception)
+                 {
+                     Com.Serial.Close();
+                 }
+                 
+             }
+             if (_deviceFound)
+             {
+
+                 try
+                 {
+                     SetButtonsEnabled(true);
+                     LoadNumbers();
+                     MessageBox.Show(Com.ReadSerial());
+                 }
+                 catch (Exception exception)
+                 {
+                     RadMessageBox.Show(exception.Message, "", MessageBoxButtons.OK, RadMessageIcon.Error); ;
+                 }
+             }
+             else
+             {
+                 RadMessageBox.Show("Устройство не обнаружено", " ", MessageBoxButtons.OK, RadMessageIcon.Exclamation);
+             }
+
+        }
+
+        void Serial_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
+        {
+            dataRecievedEvent.Set();
+        }
+
+        private void SetButtonsEnabled(bool state)
+        {
+            buttonDisconnect.Enabled = state;
+            buttonWrite.Enabled = state;
+            buttonFilterAdd.Enabled = state;
+            buttonFilterClear.Enabled = state;
+            buttonAlertAdd.Enabled = state;
+            buttonAlertClear.Enabled = state;
+        }
+        
         private void LoadNumbers()
         {
-            int filterNumbersCount = _device.ReadMem(0x1);
-            int alertNumbersCount = _device.ReadMem(0x2);
-            for (int i = 0; i < filterNumbersCount; i++)
+            try
             {
-                string number = "";
-                byte numberStart = (byte)(0x2 + i*10);
-                byte numberEnd = (byte) (0x11 + i*10);
-                for (byte j = numberStart; j <= numberEnd; j++)
+                byte memOffset = 0;
+                int filterNumbersCount = Com.ReadMem(memOffset++);
+                int alertNumbersCount = Com.ReadMem(memOffset++);
+                
+                filterList.Items.Clear();
+                alertList.Items.Clear();
+                for (int i = 0; i < filterNumbersCount; i++)
                 {
-                    number += _device.ReadMem(j).ToString();
+                    string number = "";
+                    for (int j = 0; j < Com.NumberLength; j++)
+                    {
+                        number += Com.ReadMem(memOffset++).ToString();
+                    }
+                    filterList.Items.Add(number);
                 }
-                filterList.Items.Add(number);
+                for (int i = 0; i < alertNumbersCount; i++)
+                {
+                    string number = "";
+                    for (int j = 0; j < Com.NumberLength; j++)
+                    {
+                        number += Com.ReadMem(memOffset++).ToString();
+                    }
+                    alertList.Items.Add(number);
+                }
 
+                
             }
-            for (int i = filterNumbersCount; i < filterNumbersCount+alertNumbersCount; i++)
+            catch (Exception exception)
             {
-                string number = "";
-                byte numberStart = (byte)(0x2 + i * 10);
-                byte numberEnd = (byte)(0x11 + i * 10);
-                for (byte j = numberStart; j <= numberEnd; j++)
-                {
-                    number += _device.ReadMem(j).ToString();
-                }
-                alertList.Items.Add(number);
-
+                RadMessageBox.Show(exception.Message, "", MessageBoxButtons.OK, RadMessageIcon.Error); ;
             }
+            
+           
         }
 
         private void buttonDisconnect_Click(object sender, EventArgs e)
         {
-            _device.Port.Close();
+            DialogResult choice = RadMessageBox.Show("Отключить устройство?", "", MessageBoxButtons.YesNo,
+              RadMessageIcon.Question);
+            if (choice == DialogResult.No) return;
+            Com.ResetDevice();
             SetButtonsEnabled(false);
-
+            Com.Serial.Close();
         }
 
         private void buttonWrite_Click(object sender, EventArgs e)
         {
-            int filterNumbersCount = filterList.Items.Count;
-            int alertNumbersCount = alertList.Items.Count;
-            for (int i = 0; i < filterNumbersCount; i++)
+            try
             {
-                string number = filterList.Items[i].Text;
-                byte numberStart = (byte)(0x2 + i * 10);
-                byte numberEnd = (byte)(0x11 + i * 10);
-                
-                int stringPos = 0;
-                for (byte j = numberStart; j <= numberEnd; j++)
+                byte memOffset = 0;
+                Com.WriteMem(memOffset++, (byte) filterList.Items.Count);
+                Com.WriteMem(memOffset++, (byte) alertList.Items.Count);
+                foreach (var item in filterList.Items)
                 {
-                    _device.WriteMem(j,byte.Parse(number.Substring(stringPos,1)));
-                    stringPos++;
+                    for (int i = 0; i < item.Text.Length; i++)
+                    {
+                        Com.WriteMem(memOffset++, byte.Parse(item.Text.Substring(i, 1)));
+                    }
                 }
-                filterList.Items.Add(number);
+                foreach (var item in alertList.Items)
+                {
+                    for (int i = 0; i < item.Text.Length; i++)
+                    {
+                        Com.WriteMem(memOffset++, byte.Parse(item.Text.Substring(i, 1)));
+                    }
+                }
+                RadMessageBox.Show("Запись ОК", "", MessageBoxButtons.OK, RadMessageIcon.Info);
+                LoadNumbers();
 
             }
-            for (int i = filterNumbersCount; i < filterNumbersCount + alertNumbersCount; i++)
+            catch (Exception exception)
             {
-                string number = alertList.Items[i-filterNumbersCount].Text;
-                byte numberStart = (byte)(0x2 + i * 10);
-                byte numberEnd = (byte)(0x11 + i * 10);
-                int stringPos = 0;
-                for (byte j = numberStart; j <= numberEnd; j++)
-                {
-                    _device.WriteMem(j, byte.Parse(number.Substring(stringPos, 1)));
-                    stringPos++;
-                }
-                alertList.Items.Add(number);
-
+                RadMessageBox.Show(exception.Message,"", MessageBoxButtons.OK, RadMessageIcon.Error);
             }
         }
 

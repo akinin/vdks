@@ -18,10 +18,18 @@ namespace Numberry
         private StackLayoutPanel stackLayout;
         private RadLabelElement labelPrefix;
         private RadMaskedEditBoxElement textBoxNumber;
-      
-        
-        
-       protected override void CreateChildElements()
+
+        public NumberItem(string text)
+        {
+            this.Data.Text = text;
+        }
+
+        public NumberItem()
+        {
+            
+        }
+
+        protected override void CreateChildElements()
         {
             base.CreateChildElements();
             this.stackLayout = new StackLayoutPanel();
@@ -39,15 +47,13 @@ namespace Numberry
             this.textBoxNumber.TextChanged += textBoxNumber_TextChanged;
             this.textBoxNumber.MaskType = MaskType.Standard;
             this.textBoxNumber.MouseUp += textBoxNumber_MouseUp;
-           this.textBoxNumber.Border.Visibility = ElementVisibility.Hidden;
-           
+            this.textBoxNumber.Border.Visibility = ElementVisibility.Hidden;
             this.textBoxNumber.TextRenderingHint = TextRenderingHint.SystemDefault;
             this.textBoxNumber.Mask = "(000) 000-0000";
-           
+            this.textBoxNumber.Text = "";
             this.stackLayout.Children.Add(this.textBoxNumber);
 
 
-            
             this.Children.Add(this.stackLayout);
         }
 
@@ -81,8 +87,9 @@ namespace Numberry
         {
             get
             {
-                return typeof(SimpleListViewVisualItem);
+                return typeof(SimpleListViewVisualItem); //так надо
             }
         }
+        
     }
 }
