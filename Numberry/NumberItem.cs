@@ -69,9 +69,9 @@ namespace Numberry
        {
            if (Data != null)
            {
-               
-               this.Data.Text = this.textBoxNumber.TextBoxItem.Text.Replace(" ","").Replace("(","").Replace(")","").Replace(" ","").Replace("-","").Replace("_","");
-              
+
+               this.Data.Text = this.textBoxNumber.TextBoxItem.Text.Replace(" ", "").Replace("(", "").Replace(")", "").Replace(" ", "").Replace("-", "").Replace("_", "");
+
            }
        }
 

@@ -26,11 +26,6 @@ namespace Numberry
             dataRecievedEvent = new ManualResetEventSlim(false);
         }
 
-        private void List_VisualItemCreating(object sender, Telerik.WinControls.UI.ListViewVisualItemCreatingEventArgs e)
-        {
-           e.VisualItem = new NumberItem();
-        }
-
         private void buttonFilterAdd_Click(object sender, EventArgs e)
         {
             this.filterList.Items.Add("");
@@ -97,7 +92,7 @@ namespace Numberry
                  {
                      SetButtonsEnabled(true);
                      LoadNumbers();
-                     MessageBox.Show(Com.ReadSerial());
+                    // MessageBox.Show(Com.ReadSerial());
                  }
                  catch (Exception exception)
                  {
@@ -154,7 +149,7 @@ namespace Numberry
                     }
                     alertList.Items.Add(number);
                 }
-
+                
                 
             }
             catch (Exception exception)
@@ -179,6 +174,33 @@ namespace Numberry
         {
             try
             {
+                StringBuilder sb = new StringBuilder();
+                foreach (ListViewDataItem item in alertList.Items)
+                {
+                    if (item.Text.Length != 10 )
+                    {
+                        item.BackColor = Color.Red;
+                        sb.Append(item.Text + "\r\n");
+                    }
+                   
+
+                }
+                foreach (ListViewDataItem item in filterList.Items)
+                {
+                    if (item.Text.Length != 10)
+                    {
+                        item.BackColor = Color.Red;
+                        sb.Append(item.Text + "\r\n");
+                    }
+                   
+
+                }
+                if (sb.Length > 0)
+                {
+                    DialogResult choice = RadMessageBox.Show("Неверно введены номера:\r\n" + sb, "Ошибка", MessageBoxButtons.OK,
+              RadMessageIcon.Error);
+                    return;
+                }
                 byte memOffset = 0;
                 Com.WriteMem(memOffset++, (byte) filterList.Items.Count);
                 Com.WriteMem(memOffset++, (byte) alertList.Items.Count);
@@ -205,6 +227,24 @@ namespace Numberry
                 RadMessageBox.Show(exception.Message,"", MessageBoxButtons.OK, RadMessageIcon.Error);
             }
         }
+
+        private void List_ItemEdited(object sender, ListViewItemEditedEventArgs e)
+        {
+            var element = sender as RadListViewElement;
+            if(element == null) return;
+            element.SelectedItem.BackColor = Color.White;
+        }
+
+        private void List_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                ((RadListView)sender).EndEdit();
+            }
+            e.Handled = true;
+        }
+
+      
 
        
     }

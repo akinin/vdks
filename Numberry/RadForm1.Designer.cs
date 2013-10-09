@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RadForm1));
             this.windows8Theme1 = new Telerik.WinControls.Themes.Windows8Theme();
             this.radPageViewPage3 = new Telerik.WinControls.UI.RadPageViewPage();
             this.buttonAlertAdd = new Telerik.WinControls.UI.RadButton();
@@ -64,16 +65,16 @@
             this.radPageViewPage3.Controls.Add(this.buttonAlertAdd);
             this.radPageViewPage3.Controls.Add(this.buttonAlertClear);
             this.radPageViewPage3.Controls.Add(this.alertList);
-            this.radPageViewPage3.Location = new System.Drawing.Point(6, 81);
+            this.radPageViewPage3.Location = new System.Drawing.Point(6, 87);
             this.radPageViewPage3.Name = "radPageViewPage3";
-            this.radPageViewPage3.Size = new System.Drawing.Size(280, 287);
+            this.radPageViewPage3.Size = new System.Drawing.Size(280, 281);
             this.radPageViewPage3.Text = "Оповещение";
             // 
             // buttonAlertAdd
             // 
             this.buttonAlertAdd.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.buttonAlertAdd.Enabled = false;
-            this.buttonAlertAdd.Location = new System.Drawing.Point(0, 205);
+            this.buttonAlertAdd.Location = new System.Drawing.Point(0, 199);
             this.buttonAlertAdd.Name = "buttonAlertAdd";
             this.buttonAlertAdd.Size = new System.Drawing.Size(280, 41);
             this.buttonAlertAdd.TabIndex = 5;
@@ -85,7 +86,7 @@
             // 
             this.buttonAlertClear.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.buttonAlertClear.Enabled = false;
-            this.buttonAlertClear.Location = new System.Drawing.Point(0, 246);
+            this.buttonAlertClear.Location = new System.Drawing.Point(0, 240);
             this.buttonAlertClear.Name = "buttonAlertClear";
             this.buttonAlertClear.Size = new System.Drawing.Size(280, 41);
             this.buttonAlertClear.TabIndex = 4;
@@ -95,32 +96,32 @@
             // 
             // alertList
             // 
-            this.alertList.AllowEdit = false;
             this.alertList.Dock = System.Windows.Forms.DockStyle.Top;
+            this.alertList.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.alertList.Location = new System.Drawing.Point(0, 0);
             this.alertList.Name = "alertList";
             this.alertList.ShowColumnHeaders = false;
-            this.alertList.Size = new System.Drawing.Size(280, 199);
+            this.alertList.Size = new System.Drawing.Size(280, 193);
             this.alertList.TabIndex = 3;
             this.alertList.Text = "radListView1";
             this.alertList.ThemeName = "Windows8";
-            this.alertList.VisualItemCreating += new Telerik.WinControls.UI.ListViewVisualItemCreatingEventHandler(this.List_VisualItemCreating);
+            this.alertList.ItemEdited += new Telerik.WinControls.UI.ListViewItemEditedEventHandler(this.List_ItemEdited);
             // 
             // radPageViewPage2
             // 
             this.radPageViewPage2.Controls.Add(this.buttonFilterAdd);
             this.radPageViewPage2.Controls.Add(this.buttonFilterClear);
             this.radPageViewPage2.Controls.Add(this.filterList);
-            this.radPageViewPage2.Location = new System.Drawing.Point(6, 81);
+            this.radPageViewPage2.Location = new System.Drawing.Point(6, 87);
             this.radPageViewPage2.Name = "radPageViewPage2";
-            this.radPageViewPage2.Size = new System.Drawing.Size(280, 287);
+            this.radPageViewPage2.Size = new System.Drawing.Size(280, 281);
             this.radPageViewPage2.Text = "Фильтр входящих номеров";
             // 
             // buttonFilterAdd
             // 
             this.buttonFilterAdd.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.buttonFilterAdd.Enabled = false;
-            this.buttonFilterAdd.Location = new System.Drawing.Point(0, 205);
+            this.buttonFilterAdd.Location = new System.Drawing.Point(0, 199);
             this.buttonFilterAdd.Name = "buttonFilterAdd";
             this.buttonFilterAdd.Size = new System.Drawing.Size(280, 41);
             this.buttonFilterAdd.TabIndex = 2;
@@ -132,7 +133,7 @@
             // 
             this.buttonFilterClear.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.buttonFilterClear.Enabled = false;
-            this.buttonFilterClear.Location = new System.Drawing.Point(0, 246);
+            this.buttonFilterClear.Location = new System.Drawing.Point(0, 240);
             this.buttonFilterClear.Name = "buttonFilterClear";
             this.buttonFilterClear.Size = new System.Drawing.Size(280, 41);
             this.buttonFilterClear.TabIndex = 1;
@@ -142,16 +143,17 @@
             // 
             // filterList
             // 
-            this.filterList.AllowEdit = false;
             this.filterList.Dock = System.Windows.Forms.DockStyle.Top;
+            this.filterList.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.filterList.Location = new System.Drawing.Point(0, 0);
             this.filterList.Name = "filterList";
             this.filterList.ShowColumnHeaders = false;
-            this.filterList.Size = new System.Drawing.Size(280, 199);
+            this.filterList.Size = new System.Drawing.Size(280, 193);
             this.filterList.TabIndex = 0;
             this.filterList.Text = "radListView1";
             this.filterList.ThemeName = "Windows8";
-            this.filterList.VisualItemCreating += new Telerik.WinControls.UI.ListViewVisualItemCreatingEventHandler(this.List_VisualItemCreating);
+            this.filterList.ItemEdited += new Telerik.WinControls.UI.ListViewItemEditedEventHandler(this.List_ItemEdited);
+            this.filterList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.List_KeyDown);
             // 
             // buttonWrite
             // 
@@ -161,6 +163,7 @@
             this.buttonWrite.Name = "buttonWrite";
             this.buttonWrite.Size = new System.Drawing.Size(140, 40);
             this.buttonWrite.TabIndex = 3;
+            this.buttonWrite.TabStop = false;
             this.buttonWrite.Text = "Запись";
             this.buttonWrite.ThemeName = "Windows8";
             this.buttonWrite.Click += new System.EventHandler(this.buttonWrite_Click);
@@ -173,6 +176,7 @@
             this.buttonDisconnect.Name = "buttonDisconnect";
             this.buttonDisconnect.Size = new System.Drawing.Size(140, 40);
             this.buttonDisconnect.TabIndex = 2;
+            this.buttonDisconnect.TabStop = false;
             this.buttonDisconnect.Text = "Отключиться";
             this.buttonDisconnect.ThemeName = "Windows8";
             this.buttonDisconnect.Click += new System.EventHandler(this.buttonDisconnect_Click);
@@ -184,6 +188,7 @@
             this.buttonConnect.Name = "buttonConnect";
             this.buttonConnect.Size = new System.Drawing.Size(140, 40);
             this.buttonConnect.TabIndex = 1;
+            this.buttonConnect.TabStop = false;
             this.buttonConnect.Text = "Поиск";
             this.buttonConnect.ThemeName = "Windows8";
             this.buttonConnect.Click += new System.EventHandler(this.buttonConnect_Click);
@@ -192,6 +197,7 @@
             // 
             this.tabView1.Controls.Add(this.radPageViewPage2);
             this.tabView1.Controls.Add(this.radPageViewPage3);
+            this.tabView1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.tabView1.Location = new System.Drawing.Point(0, 0);
             this.tabView1.Name = "tabView1";
             this.tabView1.SelectedPage = this.radPageViewPage3;
@@ -214,7 +220,6 @@
             // 
             // RadForm1
             // 
-            this.AcceptButton = this.buttonConnect;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(446, 386);
@@ -224,6 +229,7 @@
             this.Controls.Add(this.buttonDisconnect);
             this.Controls.Add(this.buttonConnect);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "RadForm1";
