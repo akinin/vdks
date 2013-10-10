@@ -28,7 +28,11 @@ void(* resetFunc) (void) = 0; //declare reset function @ address 0
 
 void setup()
 {
+<<<<<<< HEAD
         Serial.begin(9600);
+=======
+        Serial.begin(115200);
+>>>>>>> master
         pinMode(LEDPIN,OUTPUT);
         pinMode(RELAYPIN1, OUTPUT);
         pinMode(RELAYPIN2, OUTPUT);
