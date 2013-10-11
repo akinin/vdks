@@ -73,7 +73,13 @@ namespace Numberry
                      Com.Serial.Open();
                      dataRecievedEvent.Wait(3000);
                      if (!dataRecievedEvent.IsSet) throw new Exception("no answer");
-                     if (Com.Serial.ReadByte() != Com.EchoCode) throw new Exception("unsupported device"); ;
+                     int request = 0;
+                     while(Com.Serial.BytesToRead > 0)
+                     {
+                         request = Com.Serial.ReadByte();
+                         if (request == Com.EchoCode) break;
+                     }
+                     if (request != Com.EchoCode) throw new Exception("unsupported device");
                      Com.Serial.Write(new byte[]{Com.EchoReply},0,1);
                      _deviceFound = true;
                      dataRecievedEvent.Reset();

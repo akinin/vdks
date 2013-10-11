@@ -7,6 +7,7 @@ Programmer:	Mitsengendler A.
 Production:	RumCode
 */
 
+#define DEBUG
 
 #ifndef Arduino_h
 #include "Arduino.h"
@@ -42,7 +43,22 @@ bool GSM::sendCommand(const String& command)
 	//}
 	//return false;
 }
-
+String GSM::GetIMEI()
+{
+  String ret = "";
+   gsmSerial.flush();
+   gsmSerial.print("AT+CGSN");
+   gsmSerial.write(cr);
+   delay(200);
+   char currCh;
+   while(gsmSerial.available() > 0) //last symbol is always '\n'
+     {
+        currCh = gsmSerial.read();
+        if(currCh == cr || currCh == lf) return ret;
+        ret += String(currCh);
+      }  
+  
+}
 
 //send command through SoftwareSerial and wait for defined response
 bool GSM::sendCommandWaitResponse(const String& command,const String& response, int tryCount)
@@ -115,7 +131,7 @@ bool GSM::initSMS()
 //Sends sms
 bool GSM::SendSMS(const String& number,const String& text)
 {
-  String numberCommand = "AT + CMGS = \"" + number + "\"";
+  String numberCommand = "AT + CMGS = \"+7" + number + "\"";
   #ifdef DEBUG
   Serial.print("numberCommand: ");
   Serial.println(numberCommand);

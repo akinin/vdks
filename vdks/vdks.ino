@@ -88,7 +88,8 @@ void loop()
              {
                  if( millis() - timeStarted > TIMETOFILL) break;
                  #ifdef DEBUG
-                 Serial.println(digitalRead(SENSORPIN));
+                 Serial.print(digitalRead(SENSORPIN));
+                 Serial.write(13);
                  #endif
                  delay(1);
              }
@@ -135,7 +136,7 @@ void serviceMode()//PC-client communication
         EEPROM.write(Serial.read(), Serial.read());
         break;
       case SERIALCODE:
-        Serial.print("AA000000000");
+        Serial.println(gsm.GetIMEI());
         break;
       case RESETCODE:
         resetFunc(); 
@@ -232,7 +233,7 @@ void AlertToAll(const String& message)
   for(int i=0; i< alertNumbersCount;i++)
   {
   gsm.SendSMS(alertNumbers[i],message);
-  delay(200);
+  delay(10000);
   }
 }
 

@@ -24,6 +24,7 @@ public:
 	bool SendSMS(const String&, const String&);
 	bool SMSRecieved(String&, String&);
 	void LED(int);
+	String GetIMEI();
 private:
 	bool sendCommand(const String&);
         bool sendCommandWaitResponse(const String&, const String&, int=3);
